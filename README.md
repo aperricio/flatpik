@@ -17,4 +17,5 @@ It's just a .py file, but it needs modules like Qt5 and requests. Install them u
 This is a work in progress; not finished at all. Coming soon.
 
 * Messages and info abount install progress.
+* App icon for this.
 * Maybe: Uninstall button. 
