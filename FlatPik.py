@@ -171,7 +171,6 @@ class Buscar(QObject):
     @pyqtSlot(str)  
     def buscar(self, busqueda):
         miReq = requests.post(url='https://flathub.org/api/v2/search', json={'query': busqueda})
-        print(miReq.json())   
 
         global contenedor_resultados
         contenedor_resultados = '<section id="resultados">'
