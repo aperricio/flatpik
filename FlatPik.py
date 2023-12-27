@@ -126,7 +126,7 @@ css = """<style>
         padding: 0 10px;
         border-radius: 8px;
         overflow: scroll;
-        background-color: #181818
+        background-color: #161616
     }
 
     #resultados h2 {
@@ -190,21 +190,29 @@ class Buscar(QObject):
         global contenedor_resultados
         contenedor_resultados = '<section id="resultados">'
 
-        for resultado in miReq.json()['hits']:
-            if "aarch64" in resultado['arches']:
-                nombre = resultado['name'] 
-                icono = resultado['icon'] 
-                descripcion_corta = resultado['summary']
-                app_id = resultado['app_id']
-                verificada = resultado['verification_verified']
-                marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erificada</span>' if verificada == 'true' else ''
-                contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+        if len(miReq.json()['hits']) != 0:
+            for resultado in miReq.json()['hits']:
+                if "aarch64" in resultado['arches']:
+                    nombre = resultado['name'] 
+                    icono = resultado['icon'] 
+                    descripcion_corta = resultado['summary']
+                    app_id = resultado['app_id']
+                    verificada = resultado['verification_verified']
+                    marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erificada</span>' if verificada == 'true' else ''
+                    contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+        else:
+            contenedor_resultados += "<article><h2>0 resultados</h2><p>Ningún resultado coincide con la búsqueda realizada</p>"
 
         contenedor_resultados += "</section>"
 
         global html
         html = css + """
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<body>
+<button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte" style=";">Instalar flatpak</span>
+<header id="h1_flatpik"><h1>FlatPik</h1></header>
+<section id="buscar"><input type="text" id="busqueda"><button id="enviar_busqueda" onclick="enviar_busqueda()">Buscar</button></section>
+""" + contenedor_resultados + """
 <script>
      setTimeout(function() {
         document.getElementById("busqueda").focus();
@@ -233,6 +241,13 @@ class Buscar(QObject):
         objetoInstalarPaquete.instalar_paquete(id_app);
     }
 
+    document.getElementById("busqueda").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();  // Evitar que el Enter envíe el formulario
+            document.getElementById("enviar_busqueda").click();
+        }
+    });
+
 
     window.onscroll = function() {scrollFunction()};
 
@@ -244,12 +259,7 @@ class Buscar(QObject):
         }
     }
 
-</script>
-<body>
-<button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte" style=";">Instalar flatpak</span>
-<header id="h1_flatpik"><h1>FlatPik</h1></header>
-<section id="buscar"><input type="text" id="busqueda"><button onclick="enviar_busqueda()">Buscar</button></section>
-""" + contenedor_resultados + "</body>" 
+</script></body>""" 
 
 
         view.page().setHtml(html)    
@@ -263,7 +273,6 @@ class Soporte(QObject):
 
     def ejecutar_activacion(self):
         proceso = subprocess.Popen("apt install flatpak && flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo", shell=True)
-        #proceso = subprocess.Popen(["sudo", "pacman", "-Syu", "-y"])
         proceso.wait()
 
         if proceso.returncode == 0:
