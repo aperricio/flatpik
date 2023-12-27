@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QMessageBox, QGridLayout, QWidget
-import os 
+import subprocess,threading
 import requests
 
 
@@ -118,7 +117,7 @@ css = """<style>
     }
 
     #resultados article {
-        width: 300px;
+        width: 350px;
         height: 170px;
         display: inline-block;
         position: relative;
@@ -126,12 +125,13 @@ css = """<style>
         border: 2px solid grey;
         padding: 0 10px;
         border-radius: 8px;
-        overflow: scroll
+        overflow: scroll;
+        background-color: #181818
     }
 
     #resultados h2 {
         font-size: 1.2rem;
-        padding: 0
+        padding: 0;
     }
 
     #resultados article img {
@@ -158,6 +158,21 @@ css = """<style>
         float: right;
     }
 
+    .verificada {
+        font-size: 0.85rem;
+        transition: .5s;
+        opacity: 0;
+        position: relative;
+        right: 5px;
+        bottom: 1.5px;
+    }
+
+    .uve {
+        font-size: 1.5rem
+    }
+    .uve:hover + .verificada {
+        opacity: 1
+    }
 
 </style>"""
 
@@ -181,7 +196,9 @@ class Buscar(QObject):
                 icono = resultado['icon'] 
                 descripcion_corta = resultado['summary']
                 app_id = resultado['app_id']
-                contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+                verificada = resultado['verification_verified']
+                marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erificada</span>' if verificada == 'true' else ''
+                contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
 
         contenedor_resultados += "</section>"
 
@@ -228,6 +245,7 @@ class Buscar(QObject):
     }
 
 </script>
+<body>
 <button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte" style=";">Instalar flatpak</span>
 <header id="h1_flatpik"><h1>FlatPik</h1></header>
 <section id="buscar"><input type="text" id="busqueda"><button onclick="enviar_busqueda()">Buscar</button></section>
@@ -241,14 +259,36 @@ class Buscar(QObject):
 class Soporte(QObject):
     @pyqtSlot()
     def activar_soporte(self):
-        os.system("apt install flatpak && flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo")
+        threading.Thread(target=self.ejecutar_activacion).start()
 
+    def ejecutar_activacion(self):
+        proceso = subprocess.Popen("apt install flatpak && flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo", shell=True)
+        #proceso = subprocess.Popen(["sudo", "pacman", "-Syu", "-y"])
+        proceso.wait()
+
+        if proceso.returncode == 0:
+            print("Éxito")
+        elif proceso.returncode == 1: #Error
+            print("Error")
+        elif proceso.returncode == 255: #Parada manual
+            print("Parada manual")
 
 
 class Instalar(QObject):
     @pyqtSlot(str)
     def instalar_paquete(self, id_app):
-        os.system("flatpak install flathub " + id_app + " -y")
+        threading.Thread(target=lambda: self.ejecutar_instalacion(id_app)).start()
+    
+    def ejecutar_instalacion(self, id_app):
+        proceso= subprocess.Popen(["flatpak", "install", "flathub",  id_app, "-y"])
+        proceso.wait()
+
+        if proceso.returncode == 0:
+            print("Éxito")
+        elif proceso.returncode == 1: #Error
+            print("Error")
+        elif proceso.returncode == 255: #Parada manual
+            print("Parada manual")
 
 # Crear el objeto QWidget para la ventana principal
 visor = QWidget()
@@ -277,7 +317,7 @@ layout.addWidget(view, 0, 0, 1, 1)
 
 # Mostrar la ventana principal
 visor.setMinimumSize(400, 500)
-visor.setGeometry(0, 0, 1106, 600)
+visor.setGeometry(0, 0, 1256, 700)
 #visor.showMaximized()
 
 visor.show()
