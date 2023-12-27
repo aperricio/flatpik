@@ -19,7 +19,7 @@ css = """<style>
         color: #CD2355;
         text-align: center;
         font-size: 1.6rem;
-        transition: 0.3s;
+        transition: 1s;
         position: fixed;
         top: 0;
         left:0;
@@ -33,12 +33,22 @@ css = """<style>
         margin-top:180px;
     }
 
+    #h2_busqueda {
+        text-align: center;
+        margin-bottom: -20px
+    }
+
     ::-webkit-scrollbar {
         width: 0px;
     }
 
-    #soporte:focus, #buscar button, #buscar input:focus, .instalar:focus {
+    #soporte:focus, #buscar input:focus {
         outline: none;
+    }
+
+    #buscar button:focus, .instalar:focus {
+        outline: none;
+        box-shadow: 1px 1px 3px grey
     }
 
 
@@ -182,15 +192,23 @@ html=""
 class Buscar(QObject):
     def __init__(self):
         super().__init__()
-        self.buscar("") # Se ejecuta al iniciar sin nada (muestra el apartado de "Destacados")
+        self.buscar("") # Se ejecuta al iniciar sin nada (muestra el apartado de "Populares")
     @pyqtSlot(str)  
     def buscar(self, busqueda):
         miReq = requests.post(url='https://flathub.org/api/v2/search', json={'query': busqueda})
 
-        global contenedor_resultados
-        contenedor_resultados = '<section id="resultados">'
+        resultados_aarch64 = [resultado for resultado in miReq.json()['hits'] if 'aarch64' in resultado.get('arches', [])]
 
-        if len(miReq.json()['hits']) != 0:
+        numero_resultados = len(resultados_aarch64)
+
+        global contenedor_resultados
+        if busqueda == "":
+            contenedor_resultados = '<h2 id="h2_busqueda">Apps populares</h2>'
+        else:
+            contenedor_resultados = '<h2 id="h2_busqueda">' + str(numero_resultados) + ' resultados</h2>'
+        contenedor_resultados += '<section id="resultados">'
+
+        if len(miReq.json()['hits']) > 0:
             for resultado in miReq.json()['hits']:
                 if "aarch64" in resultado['arches']:
                     nombre = resultado['name'] 
@@ -201,7 +219,7 @@ class Buscar(QObject):
                     marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erificada</span>' if verificada == 'true' else ''
                     contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
         else:
-            contenedor_resultados += "<article><h2>0 resultados</h2><p>Ningún resultado coincide con la búsqueda realizada</p>"
+            contenedor_resultados += "<article><h2>0 resultados</h2><p>Ningún resultado coincide con la búsqueda realizada</p></article>"
 
         contenedor_resultados += "</section>"
 
@@ -252,7 +270,7 @@ class Buscar(QObject):
     window.onscroll = function() {scrollFunction()};
 
     function scrollFunction() {
-        if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
+        if (document.body.scrollTop > 120) {
             document.getElementById("h1_flatpik").style.fontSize = "0.45rem";
         } else {
             document.getElementById("h1_flatpik").style.fontSize = "1.6rem";
