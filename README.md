@@ -7,7 +7,7 @@ It's just a .py file, but it needs modules like Qt5 and requests. Install them u
 ## Features
 
 * Install `flatpak` package and add Flathub PPA.
-* Filter aarch64 apps (no x86_64 apps since they're not supported on Raspberry Pi).
+* aarch64 apps only (no x86_64 apps since they're not supported on Raspberry Pi).
 * Install flatpak apps quickly from the "Install" button.
 
 ![Captura de FlatpPik](capturas/featured.png)
