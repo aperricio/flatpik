@@ -17,6 +17,7 @@ It's just a .py file (this could change), but it needs modules like Qt5 and requ
 This is a work in progress; not finished at all. Coming soon.
 
 * Messages and info abount install progress.
+* Update flatpaks.
 * App icon for FlatPik.
 * Maybe: Uninstall button.
 * Maybe: Light theme.
