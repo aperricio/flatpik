@@ -18,4 +18,5 @@ This is a work in progress; not finished at all. Coming soon.
 
 * Messages and info abount install progress.
 * App icon for FlatPik.
-* Maybe: Uninstall button. 
+* Maybe: Uninstall button.
+* Maybe: Light theme.
