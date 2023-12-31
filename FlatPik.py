@@ -3,7 +3,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
-from PyQt5.QtWidgets import QApplication, QMessageBox, QGridLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
 from modules.assets import css, javascript
 import subprocess, threading, requests
 
