@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from PyQt5 import QtGui
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
@@ -8,6 +9,9 @@ import requests
 
 
 app = QApplication(["FlatPik"])
+icon = QtGui.QIcon()
+icon.addPixmap(QtGui.QPixmap("img/FlatPik.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+app.setWindowIcon(icon)
 css = """<style>
 
     body {
