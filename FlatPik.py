@@ -30,13 +30,13 @@ class Buscar(QObject):
         global contenedor_resultados
         if busqueda == "":
             contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
-        elif len(resultados_aarch64) > 0:
+        elif numero_resultados > 0:
             contenedor_resultados = '<h2 id="h2_busqueda">' + str(numero_resultados) + ' results</h2>'
         else:
             contenedor_resultados = ""
         contenedor_resultados += '<section id="resultados">'
 
-        if len(miReq.json()['hits']) > 0:
+        if numero_resultados > 0:
             for resultado in miReq.json()['hits']:
                 if "aarch64" in resultado['arches']:
                     nombre = resultado['name'] 
