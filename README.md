@@ -16,14 +16,14 @@ pip install PyQt5 PyQtWebEngine requests
 * aarch64 apps only (no x86_64 apps since they're not supported on Raspberry Pi).
 * Install flatpak apps quickly from the "Install" button. Time will depend on package size and needed runtimes.
 
-![Captura de FlatpPik](img/featured.png)
+![Captura de FlatPik](img/featured.png)
 
 ## Roadmap
 
 This is a work in progress; not finished at all. Coming soon:
 
 * [x] App icon for FlatPik.
-* [ ] Messages and info abount install progress.
+* [ ] Messages and info about install progress.
 * [ ] Update flatpaks.
 * [ ] Maybe: Uninstall button.
 * [ ] Maybe: Light theme.
