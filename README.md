@@ -20,7 +20,7 @@ pip install PyQt5 PyQtWebEngine requests
 
 ## Roadmap
 
-This is a work in progress; not finished at all. Coming soon.
+This is a work in progress; not finished at all. Coming soon:
 
 * [x] App icon for FlatPik.
 * [ ] Messages and info abount install progress.
