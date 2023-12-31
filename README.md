@@ -9,6 +9,7 @@ It's almost a single .py file, but it needs some modules. Install them using pip
 ```shell
 pip install PyQt5 PyQtWebEngine requests
 ```
+
 ## Features
 
 * Install `flatpak` package and add Flathub PPA.
