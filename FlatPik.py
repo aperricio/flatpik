@@ -30,10 +30,10 @@ class Buscar(QObject):
         #global contenedor_resultados
         if busqueda == "":
             contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
-        elif numero_resultados > 0:
+        elif numero_resultados >= 0:
             contenedor_resultados = '<h2 id="h2_busqueda">' + str(numero_resultados) + ' results</h2>'
-        else:
-            contenedor_resultados = ""
+        """ else:
+            contenedor_resultados = "" """
         contenedor_resultados += '<section id="resultados">'
 
         if numero_resultados > 0:
@@ -47,7 +47,7 @@ class Buscar(QObject):
                     marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erificada</span>' if verificada == 'true' else ''
                     contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
         else:
-            contenedor_resultados += "<article><h2>0 Results</h2><p>No match for that query</p></article>"
+            contenedor_resultados += '<article style="text-align:center"><h3 style="margin-top:70px">No aarch64 match for that query</h3></article>'
 
         contenedor_resultados += "</section>"
 
