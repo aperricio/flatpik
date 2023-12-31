@@ -186,7 +186,6 @@ css = """<style>
 
 </style>"""
 
-contenedor_resultados=""
 html=""
 
 class Buscar(QObject):
@@ -203,9 +202,11 @@ class Buscar(QObject):
 
         global contenedor_resultados
         if busqueda == "":
-            contenedor_resultados = '<h2 id="h2_busqueda">Apps populares</h2>'
+            contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
+        elif len(resultados_aarch64) > 0:
+            contenedor_resultados = '<h2 id="h2_busqueda">' + str(numero_resultados) + ' results</h2>'
         else:
-            contenedor_resultados = '<h2 id="h2_busqueda">' + str(numero_resultados) + ' resultados</h2>'
+            contenedor_resultados = ""
         contenedor_resultados += '<section id="resultados">'
 
         if len(miReq.json()['hits']) > 0:
@@ -219,7 +220,7 @@ class Buscar(QObject):
                     marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erificada</span>' if verificada == 'true' else ''
                     contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
         else:
-            contenedor_resultados += "<article><h2>0 resultados</h2><p>Ningún resultado coincide con la búsqueda realizada</p></article>"
+            contenedor_resultados += "<article><h2>0 Results</h2><p>No match for that query</p></article>"
 
         contenedor_resultados += "</section>"
 
@@ -227,9 +228,9 @@ class Buscar(QObject):
         html = css + """
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
 <body>
-<button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte" style=";">Instalar flatpak</span>
+<button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte" style=";">Add flatpak support</span>
 <header id="h1_flatpik"><h1>FlatPik</h1></header>
-<section id="buscar"><input type="text" id="busqueda"><button id="enviar_busqueda" onclick="enviar_busqueda()">Buscar</button></section>
+<section id="buscar"><input type="text" id="busqueda"><button id="enviar_busqueda" onclick="enviar_busqueda()">&#8618;</button></section>
 """ + contenedor_resultados + """
 <script>
      setTimeout(function() {
