@@ -1,4 +1,4 @@
-<img align="left" src="img/FlatPik.png" style="width: 300px; margin-bottom:20px">
+<p  align="center"><img src="img/FlatPik.png" style="width: 300px; margin-bottom:20px"></p>
 
 # FlatPik: the Flatpak App Store for Raspberry Pi
 
