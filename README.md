@@ -2,7 +2,7 @@
 
 # FlatPik: the Flatpak App Store for Raspberry Pi
 
-This is FlatPik. It's just a front-end to search and install flatpak apps from Flathub on Raspberry Pi OS, made for fun. That, and for those who doesn't like to use terminal.
+This is FlatPik. It's just a front-end to search and install flatpak apps from Flathub on Raspberry Pi OS, made for fun. That, and for those who doesn't like to use terminal. Everything FlatPik does can be done from console running some commands.
 
 It's almost a single .py file, but it needs some modules. Install them using pip or apt. You can create a virtual environment (venv) too.
 
