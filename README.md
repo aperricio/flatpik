@@ -7,9 +7,7 @@ This is FlatPik. It's just a front-end to search and install flatpak apps from F
 
 It's just a .py file (this could change), but it needs some modules. Install them using pip or apt. You can create a virtual environment (venv) too.
 ```shell
-pip install PyQt5
-pip install PyQtWebEngine
-pip install requests
+pip install PyQt5 PyQtWebEngine requests
 ```
 ## Features
 
