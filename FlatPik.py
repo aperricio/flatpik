@@ -27,7 +27,7 @@ class Buscar(QObject):
 
         numero_resultados = len(resultados_aarch64)
 
-        global contenedor_resultados
+        #global contenedor_resultados
         if busqueda == "":
             contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
         elif numero_resultados > 0:
