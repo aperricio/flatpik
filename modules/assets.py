@@ -206,7 +206,6 @@ javascript= """<script>
 
     document.getElementById("busqueda").addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
-            event.preventDefault();  // Evitar que el Enter envíe el formulario
             document.getElementById("enviar_busqueda").click();
         }
     });
