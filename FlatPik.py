@@ -90,15 +90,12 @@ class InstalarApp(QObject):
         elif proceso.returncode == 255: #Parada manual
             print("Parada manual")
 
-# Crear el objeto QWidget para la ventana principal
 visor = QWidget()
 
-# Configurar el layout de la ventana principal
 layout = QGridLayout()
 layout.setContentsMargins(0, 0, 0, 0)
 visor.setLayout(layout)
 
-# Crear el objeto QWebEngineView
 view = QWebEngineView()
 page = QWebEnginePage(view)
 channel = QWebChannel()
@@ -112,10 +109,7 @@ channel.registerObject("botonInstalarPaquete", botonInstalarApp)
 view.setPage(page)
 view.page().setHtml(html)                    
 
-# Agregar el QWebEngineView al layout de la ventana principal
 layout.addWidget(view, 0, 0, 1, 1)
-
-# Mostrar la ventana principal
 visor.setMinimumSize(400, 500)
 visor.setGeometry(0, 0, 1256, 720)
 #visor.showMaximized()
