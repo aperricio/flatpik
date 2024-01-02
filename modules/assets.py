@@ -155,6 +155,7 @@ css = """<style>
     #resultados h2 {
         font-size: 1.2rem;
         padding: 0;
+        cursor: pointer
     }
 
     #resultados article img {
@@ -208,10 +209,12 @@ javascript= """<script>
     let objetoInstalarFlatpak = null;
     let objetoBuscar = null;
     let objetoInstalarPaquete = null;
+    let objetoAbrirWeb = null;
     new QWebChannel(qt.webChannelTransport, function (channel) {
         objetoInstalarFlatpak = channel.objects.botonInstalarFlatpak;
         objetoBuscar = channel.objects.botonBuscar;
         objetoInstalarPaquete = channel.objects.botonInstalarPaquete;
+        objetoAbrirWeb = channel.objects.botonAbrirWeb;
     });
 
     function activar_soporte() {
@@ -226,6 +229,10 @@ javascript= """<script>
 
     function instalar_paquete(id_app) {
         objetoInstalarPaquete.instalar_paquete(id_app);
+    }
+
+    function abrir_web(url) {
+        objetoAbrirWeb.abrir_pagina_web(url);
     }
 
     document.getElementById("busqueda").addEventListener("keydown", function(event) {
