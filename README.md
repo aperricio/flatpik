@@ -15,7 +15,7 @@ pip install PyQt5 PyQtWebEngine requests
 * Install `flatpak` package and add Flathub PPA.
 * Install flatpak apps quickly from the "Install" button. Time will depend on package size and needed runtimes.
 * aarch64 apps only (no x86_64 apps since they're not supported on Raspberry Pi).
-* Link to detailed info on app name (official website if verification_website != None, else Flathub).
+* Link to detailed info on app name (official website if website-verified, else Flathub).
 
 ![Captura de FlatPik](img/featured.png)
 
