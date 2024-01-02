@@ -25,27 +25,21 @@ class Buscar(QObject):
 
         resultados_aarch64 = [resultado for resultado in miReq.json()['hits'] if 'aarch64' in resultado.get('arches', [])]
 
-        numero_resultados = len(resultados_aarch64)
-
-        #global contenedor_resultados
         if busqueda == "":
             contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
-        elif numero_resultados >= 0:
-            contenedor_resultados = '<h2 id="h2_busqueda">' + str(numero_resultados) + ' results</h2>'
-        """ else:
-            contenedor_resultados = "" """
+        else:
+            contenedor_resultados = '<h2 id="h2_busqueda">' + str(len(resultados_aarch64)) + ' results</h2>'
         contenedor_resultados += '<section id="resultados">'
 
-        if numero_resultados > 0:
-            for resultado in miReq.json()['hits']:
-                if "aarch64" in resultado['arches']:
-                    nombre = resultado['name'] 
-                    icono = resultado['icon'] 
-                    descripcion_corta = resultado['summary']
-                    app_id = resultado['app_id']
-                    verificada = resultado['verification_verified']
-                    marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erified</span>' if verificada == 'true' else ''
-                    contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+        if len(resultados_aarch64) > 0:
+            for resultado in resultados_aarch64:
+                nombre = resultado['name'] 
+                icono = resultado['icon'] 
+                descripcion_corta = resultado['summary']
+                app_id = resultado['app_id']
+                verificada = resultado['verification_verified']
+                marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erified</span>' if verificada == 'true' else ''
+                contenedor_resultados += '<article><img src="' + icono + '"><h2>' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
         else:
             contenedor_resultados += '<article style="text-align:center"><h3 style="margin-top:70px">No aarch64 matches for that query</h3></article>'
 
