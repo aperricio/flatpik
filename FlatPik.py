@@ -47,9 +47,10 @@ class BuscarApp(QObject):
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
 <body>
 <button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte" style=";">Add flatpak support</span>
+<button onclick="funcionArriba()" id="botonArriba">&#8593;</button>
 <header id="h1_flatpik"><h1>FlatPik</h1></header>
 <section id="buscar"><input type="text" id="busqueda"><button id="enviar_busqueda" onclick="enviar_busqueda()">&#8618;</button></section>
-""" + contenedor_resultados + javascript + "</body>"
+""" + contenedor_resultados + javascript + '</body>'
 
 
         view.page().setHtml(html)    

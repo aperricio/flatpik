@@ -53,7 +53,7 @@ css = """<style>
     }
 
 
-    #soporte {
+    #soporte, #botonArriba {
         background-color: #1f1f1f;
         border: 2px solid #CD2355;
         color: #CD2355;
@@ -62,13 +62,24 @@ css = """<style>
         border-radius: 5px;
         position: fixed;
         z-index:111;
-        padding: 3px 7px;
-        left: 10px;
-        bottom: 10px;
     }
 
+    #soporte {
+        left: 10px;
+        bottom: 10px;
+        padding: 3px 7px;
+    }
 
-    #soporte:hover, #buscar button:hover, .instalar:hover {
+    #botonArriba {
+        bottom: 10px;
+        right: -135px;
+        font-size: 30px;
+        font-weight: bolder;
+        padding: 3px 12px;
+        outline: none
+    }
+
+    #soporte:hover, #buscar button:hover, .instalar:hover, #botonArriba:hover {
         background-color: #CD2355;
         border: 2px solid #CD2355;
         color: #1f1f1f;
@@ -186,6 +197,7 @@ css = """<style>
         opacity: 1
     }
 
+
 </style>"""
 
 javascript= """<script>
@@ -231,6 +243,24 @@ javascript= """<script>
         } else {
             document.getElementById("h1_flatpik").style.fontSize = "1.6rem";
         }
+    }
+
+    let botonArriba = document.getElementById("botonArriba");
+
+    window.onscroll = function() {
+        volverArriba()
+    };
+
+    function volverArriba() {
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            botonArriba.style.right = "10px";
+        } else {
+            botonArriba.style.right = "-115px";
+        }
+    }
+
+    function funcionArriba() {
+        document.body.scrollTop = 0;
     }
 
 </script>"""
