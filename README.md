@@ -23,6 +23,7 @@ pip install PyQt5 PyQtWebEngine requests
 This is a work in progress; not finished at all. Coming soon:
 
 * [x] App icon for FlatPik.
+* [X] App name opens website (flathub if not verified)
 * [ ] Messages and info about install progress.
 * [ ] Update flatpaks.
 * [x] Back to top button.
