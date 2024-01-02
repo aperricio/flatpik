@@ -235,7 +235,10 @@ javascript= """<script>
     });
 
 
-    window.onscroll = function() {scrollFunction()};
+    window.onscroll = function() {
+        scrollFunction();
+        volverArriba()
+    };
 
     function scrollFunction() {
         if (document.body.scrollTop > 120) {
@@ -246,10 +249,6 @@ javascript= """<script>
     }
 
     let botonArriba = document.getElementById("botonArriba");
-
-    window.onscroll = function() {
-        volverArriba()
-    };
 
     function volverArriba() {
         if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
