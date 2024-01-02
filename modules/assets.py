@@ -208,7 +208,7 @@ javascript= """<script>
 
     function enviar_busqueda() {
         let busqueda = document.getElementById('busqueda').value;
-        objetoBuscar.buscar(busqueda)
+        objetoBuscar.buscarApp(busqueda)
     }
 
 

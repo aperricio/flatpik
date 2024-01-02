@@ -13,12 +13,12 @@ icon = QtGui.QIcon()
 icon.addPixmap(QtGui.QPixmap("img/FlatPik.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 app.setWindowIcon(icon)
 
-class Buscar(QObject):
+class BuscarApp(QObject):
     def __init__(self):
         super().__init__()
-        self.buscar("") # Se ejecuta al iniciar sin nada (muestra el apartado de "Populares")
+        self.buscarApp("") # Se ejecuta al iniciar sin nada (muestra el apartado de "Populares")
     @pyqtSlot(str)  
-    def buscar(self, busqueda):
+    def buscarApp(self, busqueda):
         miReq = requests.post(url='https://flathub.org/api/v2/search', json={'query': busqueda})
         resultados_aarch64 = [resultado for resultado in miReq.json()['hits'] if 'aarch64' in resultado.get('arches', [])]
 
@@ -56,7 +56,7 @@ class Buscar(QObject):
 
 
 
-class Soporte(QObject):
+class ActivarSoporte(QObject):
     @pyqtSlot()
     def activar_soporte(self):
         threading.Thread(target=self.ejecutar_activacion).start()
@@ -73,7 +73,7 @@ class Soporte(QObject):
             print("Parada manual")
 
 
-class Instalar(QObject):
+class InstalarApp(QObject):
     @pyqtSlot(str)
     def instalar_paquete(self, id_app):
         threading.Thread(target=lambda: self.ejecutar_instalacion(id_app)).start()
@@ -102,12 +102,12 @@ view = QWebEngineView()
 page = QWebEnginePage(view)
 channel = QWebChannel()
 page.setWebChannel(channel)
-botonActivarSoporte = Soporte()
+botonActivarSoporte = ActivarSoporte()
 channel.registerObject("botonInstalarFlatpak", botonActivarSoporte)
-botonBuscar = Buscar()
-channel.registerObject("botonBuscar", botonBuscar)
-botonInstalarPaquete = Instalar()
-channel.registerObject("botonInstalarPaquete", botonInstalarPaquete)
+botonBuscarApp = BuscarApp()
+channel.registerObject("botonBuscar", botonBuscarApp)
+botonInstalarApp = InstalarApp()
+channel.registerObject("botonInstalarPaquete", botonInstalarApp)
 view.setPage(page)
 view.page().setHtml(html)                    
 
