@@ -116,7 +116,7 @@ layout.addWidget(view, 0, 0, 1, 1)
 
 # Mostrar la ventana principal
 visor.setMinimumSize(400, 500)
-visor.setGeometry(0, 0, 1256, 700)
+visor.setGeometry(0, 0, 1256, 720)
 #visor.showMaximized()
 
 visor.show()
