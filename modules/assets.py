@@ -23,9 +23,20 @@ css = """<style>
         margin-top:180px;
     }
 
+    @keyframes fundido_entrada {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
     #h2_busqueda {
         text-align: center;
-        margin-bottom: -20px
+        margin-bottom: -20px;
+        animation: fundido_entrada 1s
     }
 
     ::-webkit-scrollbar {
@@ -113,7 +124,8 @@ css = """<style>
         margin: 50px;
         display: flex;
         flex-wrap: wrap;
-        justify-content: center
+        justify-content: center;
+        animation: fundido_entrada 1s
     }
 
     #resultados article {
