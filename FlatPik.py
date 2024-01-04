@@ -21,7 +21,6 @@ class BuscarApp(QObject):
     def buscarApp(self, busqueda):
         miReq = requests.post(url='https://flathub.org/api/v2/search', json={'query': busqueda})
         resultados_aarch64 = [resultado for resultado in miReq.json()['hits'] if 'aarch64' in resultado.get('arches', [])]
-        #print(miReq.json())
 
         if busqueda == "":
             contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
