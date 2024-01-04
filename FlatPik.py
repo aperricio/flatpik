@@ -5,7 +5,7 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
 from modules.assets import css, javascript
-import subprocess, threading, requests, webbrowser
+import subprocess, threading, requests, webbrowser, os
 
 
 app = QApplication(["FlatPik"])
@@ -47,11 +47,11 @@ class BuscarApp(QObject):
 
         contenedor_resultados += "</section>"
 
+        boton_soporte = """<button id="actualizar" onclick="actualizar_todo()">&#10227;</button><span id="tipactualizartodo">Update all</span>""" if os.path.exists("/usr/bin/flatpak") else '<button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte">Add flatpak support</span>'
         global html
         html = css + """
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-<body>
-<button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte" style=";">Add flatpak support</span>
+<body> """ + boton_soporte + """
 <button onclick="funcionArriba()" id="botonArriba">&#8593;</button>
 <header id="h1_flatpik"><h1>FlatPik</h1></header>
 <section id="buscar"><input type="text" id="busqueda"><button id="enviar_busqueda" onclick="enviar_busqueda()">&#8618;</button></section>

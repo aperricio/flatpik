@@ -57,7 +57,7 @@ css = """<style>
         width: 0px;
     }
 
-    #soporte:focus, #buscar input:focus {
+    #soporte:focus, #buscar input:focus, #actualizar:focus {
         outline: none;
     }
 
@@ -67,7 +67,7 @@ css = """<style>
     }
 
 
-    #soporte, #botonArriba {
+    #soporte, #botonArriba, #actualizar {
         background-color: #1f1f1f;
         border: 2px solid #CD2355;
         color: #CD2355;
@@ -78,7 +78,7 @@ css = """<style>
         z-index:111;
     }
 
-    #soporte {
+    #soporte, #actualizar {
         left: 10px;
         bottom: 10px;
         padding: 3px 7px;
@@ -93,18 +93,18 @@ css = """<style>
         outline: none
     }
 
-    #soporte:hover, #buscar button:hover, .instalar:hover, #botonArriba:hover {
+    #soporte:hover, #actualizar:hover, #buscar button:hover, .instalar:hover, #botonArriba:hover {
         background-color: #CD2355;
         border: 2px solid #CD2355;
         color: #1f1f1f;
         cursor: pointer
     }
 
-    #soporte:hover + #tipsoporte {
+    #soporte:hover + #tipsoporte, #actualizar:hover + #tipactualizartodo {
         opacity:1;
     }
 
-    #tipsoporte {
+    #tipsoporte, #tipactualizartodo {
         color: #CD2355;
         font-size: 1.2rem;
         position: fixed;
@@ -114,9 +114,13 @@ css = """<style>
         z-index:111;
     }
 
-    #tipsoporte {
+    #tipsoporte, #tipactualizartodo {
         left: 60px;
         bottom: 18px;        
+    }
+
+    #actualizar {
+        padding-left:10px
     }
 
     #buscar {
