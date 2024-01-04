@@ -120,7 +120,7 @@ css = """<style>
     }
 
     #actualizar {
-        padding-left:10px
+        padding-left: 12px
     }
 
     #buscar {
