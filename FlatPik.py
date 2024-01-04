@@ -21,7 +21,7 @@ class BuscarApp(QObject):
     def buscarApp(self, busqueda):
         miReq = requests.post(url='https://flathub.org/api/v2/search', json={'query': busqueda})
         resultados_aarch64 = [resultado for resultado in miReq.json()['hits'] if 'aarch64' in resultado.get('arches', [])]
-        print(miReq.json())
+        #print(miReq.json())
 
         if busqueda == "":
             contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
@@ -35,10 +35,13 @@ class BuscarApp(QObject):
                 icono = resultado['icon'] 
                 descripcion_corta = resultado['summary']
                 app_id = resultado['app_id']
-                pagina_web = "https://" + resultado['verification_website'] if resultado['verification_website'] != None else "https://flathub.org/apps/" + app_id
+                pagina_web = resultado['verification_website'] if resultado['verification_website'] != None else "https://flathub.org/apps/" + app_id
                 verificada = resultado['verification_verified']
                 marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erified</span>' if verificada == 'true' else ''
-                contenedor_resultados += '<article><img src="' + icono + '"><h2 onclick="abrir_web(\'' + pagina_web + '\')">' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+                try:
+                    contenedor_resultados += '<article><img src="' + icono + '"><h2 onclick="abrir_web(\'' + pagina_web + '\')">' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+                except TypeError:
+                    """Error que no debería saltar"""
         else:
             contenedor_resultados += '<article style="text-align:center"><h3 style="margin-top:70px">No aarch64 matches for that query</h3></article>'
 

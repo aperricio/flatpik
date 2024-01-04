@@ -33,6 +33,16 @@ css = """<style>
         }
     }
 
+     @keyframes desplazamiento_arriba {
+        from {
+            top: 100px;
+        }
+
+        to {
+            top: 0;
+        }
+    }
+
     #h2_busqueda {
         text-align: center;
         margin-bottom: -20px;
@@ -149,7 +159,8 @@ css = """<style>
         padding: 0 10px;
         border-radius: 8px;
         overflow: scroll;
-        background-color: #161616
+        background-color: #161616;
+        animation: desplazamiento_arriba 1s
     }
 
     #resultados h2 {
