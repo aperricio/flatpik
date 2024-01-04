@@ -252,6 +252,13 @@ javascript= """<script>
         }
     });
 
+    document.body.addEventListener("keydown", function(event) {
+        if (event.ctrlKey && event.key === "f") {
+            document.getElementById("busqueda").focus();
+        }
+    });
+
+
 
     window.onscroll = function() {
         scrollFunction();
