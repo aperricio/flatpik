@@ -34,11 +34,15 @@ css = """<style>
     }
 
      @keyframes desplazamiento_arriba {
-        from {
+        0% {
             top: 100px;
         }
 
-        to {
+        50% {
+            top: -15px;
+        }
+
+        100% {
             top: 0;
         }
     }
