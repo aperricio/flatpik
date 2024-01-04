@@ -229,15 +229,21 @@ javascript= """<script>
     let objetoBuscar = null;
     let objetoInstalarPaquete = null;
     let objetoAbrirWeb = null;
+    let objetoActualizarTodo = null;
     new QWebChannel(qt.webChannelTransport, function (channel) {
         objetoInstalarFlatpak = channel.objects.botonInstalarFlatpak;
         objetoBuscar = channel.objects.botonBuscar;
         objetoInstalarPaquete = channel.objects.botonInstalarPaquete;
         objetoAbrirWeb = channel.objects.botonAbrirWeb;
+        objetoActualizarTodo = channel.objects.botonActualizarTodo;
     });
 
     function activar_soporte() {
         objetoInstalarFlatpak.activar_soporte();
+    }
+
+     function actualizar_todo() {
+        objetoActualizarTodo.actualizar_todo();
     }
 
     function enviar_busqueda() {

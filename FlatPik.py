@@ -78,6 +78,23 @@ class ActivarSoporte(QObject):
         elif proceso.returncode == 255: #Parada manual
             print("Parada manual")
 
+class ActualizarTodo(QObject):
+    @pyqtSlot()
+    def actualizar_todo(self):
+        threading.Thread(target=self.ejecutar_actualizacion).start()
+
+    def ejecutar_actualizacion(self):
+        proceso = subprocess.Popen(["flatpak", "update"])
+        proceso.wait()
+
+        if proceso.returncode == 0:
+            print("Éxito")
+        elif proceso.returncode == 1: #Error
+            print("Error")
+        elif proceso.returncode == 255: #Parada manual
+            print("Parada manual")
+
+
 
 class InstalarApp(QObject):
     @pyqtSlot(str)
@@ -119,6 +136,8 @@ botonInstalarApp = InstalarApp()
 channel.registerObject("botonInstalarPaquete", botonInstalarApp)
 botonAbrirWeb = PaginaWeb()
 channel.registerObject("botonAbrirWeb", botonAbrirWeb)
+botonActualizarTodo = ActualizarTodo()
+channel.registerObject("botonActualizarTodo", botonActualizarTodo)
 view.setPage(page)
 view.page().setHtml(html)                    
 
