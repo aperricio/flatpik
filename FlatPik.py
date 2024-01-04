@@ -5,7 +5,7 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
 from modules.assets import css, javascript
-import subprocess, threading, requests, webbrowser, os
+import subprocess, threading, requests, os
 
 
 app = QApplication(["FlatPik"])
@@ -115,7 +115,8 @@ class InstalarApp(QObject):
 class PaginaWeb(QObject):
     @pyqtSlot(str)
     def abrir_pagina_web(self, url):
-        webbrowser.open(url)
+        subprocess.Popen(["chromium-browser", url])
+        #webbrowser.open(url)
 
 
 visor = QWidget()
