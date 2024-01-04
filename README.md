@@ -34,6 +34,6 @@ This is a work in progress; not finished at all. Coming soon:
 * [X] App name opens website (flathub if not verified by website)
 * [ ] Messages and info about install progress.
 * [x] Update all flatpaks.
-* Maybe: 
-* * [ ] Uninstall button.
-* * [ ] Light theme.
+### Maybe: 
+* [ ] Uninstall button.
+* [ ] Light theme.
