@@ -116,7 +116,6 @@ class PaginaWeb(QObject):
     @pyqtSlot(str)
     def abrir_pagina_web(self, url):
         subprocess.Popen(["chromium-browser", url])
-        #webbrowser.open(url)
 
 
 visor = QWidget()
