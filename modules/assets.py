@@ -278,6 +278,7 @@ javascript= """<script>
 
     function funcionArriba() {
         document.body.scrollTop = 0;
+    document.getElementById('busqueda').focus()
     }
 
 </script>"""
