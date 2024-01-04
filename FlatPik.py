@@ -41,7 +41,7 @@ class BuscarApp(QObject):
                 try:
                     contenedor_resultados += '<article><img src="' + icono + '"><h2 onclick="abrir_web(\'' + pagina_web + '\')">' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
                 except TypeError:
-                    """Error que no debería saltar"""
+                    """Error que no debería saltar al realizar algunas búsquedas"""
         else:
             contenedor_resultados += '<article style="text-align:center"><h3 style="margin-top:70px">No aarch64 matches for that query</h3></article>'
 
