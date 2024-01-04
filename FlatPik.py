@@ -111,7 +111,7 @@ class ActualizarTodo(QObject):
             notification.notify(
                 app_name='FlatPik',
                 title='Error',
-                message='Error while updating. Try again.',
+                message='Error while updating. Try again, please.',
                 app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
                 timeout=20
             )
@@ -141,7 +141,7 @@ class InstalarApp(QObject):
             notification.notify(
                 app_name='FlatPik',
                 title='Error',
-                message='Error at installation. Try again.',
+                message='Error at installation. Try again, please.',
                 app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
                 timeout=20
             )
