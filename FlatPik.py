@@ -84,7 +84,7 @@ class ActualizarTodo(QObject):
         threading.Thread(target=self.ejecutar_actualizacion).start()
 
     def ejecutar_actualizacion(self):
-        proceso = subprocess.Popen(["flatpak", "update"])
+        proceso = subprocess.Popen(["flatpak", "update", "-y"])
         proceso.wait()
 
         if proceso.returncode == 0:
