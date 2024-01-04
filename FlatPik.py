@@ -147,7 +147,6 @@ view.page().setHtml(html)
 layout.addWidget(view, 0, 0, 1, 1)
 visor.setMinimumSize(400, 500)
 visor.setGeometry(0, 0, 1256, 720)
-#visor.showMaximized()
 
 visor.show()
 app.exec_()
