@@ -115,7 +115,10 @@ class InstalarApp(QObject):
 class PaginaWeb(QObject):
     @pyqtSlot(str)
     def abrir_pagina_web(self, url):
-        subprocess.Popen(["chromium-browser", url])
+        try: 
+            subprocess.Popen(["chromium-browser", url])
+        except FileNotFoundError:
+            subprocess.Popen(["firefox", url])
 
 
 visor = QWidget()
