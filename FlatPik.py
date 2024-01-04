@@ -68,7 +68,7 @@ class ActivarSoporte(QObject):
         threading.Thread(target=self.ejecutar_activacion).start()
 
     def ejecutar_activacion(self):
-        proceso = subprocess.Popen("apt install flatpak && flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo", shell=True)
+        proceso = subprocess.Popen("sudo apt install flatpak && flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo", shell=True)
         proceso.wait()
 
         if proceso.returncode == 0:
