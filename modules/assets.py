@@ -268,7 +268,7 @@ javascript= """<script>
 
     document.body.addEventListener("keydown", function(event) {
         if (event.ctrlKey && event.key === "f") {
-            document.getElementById("busqueda").focus();
+            funcionArriba()
         }
     });
 
@@ -299,7 +299,7 @@ javascript= """<script>
 
     function funcionArriba() {
         document.body.scrollTop = 0;
-    document.getElementById('busqueda').focus()
+        document.getElementById('busqueda').focus()
     }
 
 </script>"""
