@@ -110,7 +110,7 @@ css = """<style>
         position: fixed;
         opacity: 0;
         transition: .3s;
-        text-shadow: 2px 2px 1px black, 1px 1px 1px black, 3px 3px 1px black;
+        text-shadow: 2px 2px 2px black, 1px 1px 1px black, 3px 3px 3px black;
         z-index:111;
     }
 
