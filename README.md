@@ -4,10 +4,16 @@
 
 This is FlatPik. It's just a front-end to search and install flatpak apps from Flathub on Raspberry Pi OS, made for fun. That, and for those who doesn't like to use terminal. Everything FlatPik does can be done from console running some commands.
 
-It's almost a single .py file, but it needs some modules. Install them using pip or apt. You can create a virtual environment (venv) too.
+It's almost a single .py file, but it needs some modules. Install them using pip or apt. 
 
 ```shell
 pip install PyQt5 PyQtWebEngine requests
+```
+
+Or
+
+```shell
+sudo apt install python3-pyqt5.qtwebengine python3-requests python3-pyqt5
 ```
 
 ## Features
