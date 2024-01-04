@@ -12,7 +12,7 @@ app = QApplication(["FlatPik"])
 icon = QtGui.QIcon()
 icon.addPixmap(QtGui.QPixmap("img/FlatPik.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 app.setWindowIcon(icon)
-
+        
 class BuscarApp(QObject):
     def __init__(self):
         super().__init__()
