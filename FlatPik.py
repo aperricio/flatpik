@@ -93,8 +93,7 @@ class ActualizarTodo(QObject):
         elif proceso.returncode == 255: #Parada manual
             print("Parada manual")
 
-
-
+    
 class InstalarApp(QObject):
     @pyqtSlot(str)
     def instalar_paquete(self, id_app):
