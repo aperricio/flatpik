@@ -39,7 +39,7 @@ class BuscarApp(QObject):
                 verificada = resultado['verification_verified']
                 marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erified</span>' if verificada == 'true' else ''
                 try:
-                    contenedor_resultados += '<article><img src="' + icono + '"><h2 onclick="abrir_web(\'' + pagina_web + '\')">' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+                    contenedor_resultados += '<article><img src="' + icono + '"><h2 onclick="abrir_web(\'' + pagina_web + '\')">' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\', \'' + nombre +'\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
                 except TypeError:
                     """Error que no debería saltar al realizar algunas búsquedas"""
         else:
@@ -121,11 +121,11 @@ class ActualizarTodo(QObject):
 
     
 class InstalarApp(QObject):
-    @pyqtSlot(str)
-    def instalar_paquete(self, id_app):
-        threading.Thread(target=lambda: self.ejecutar_instalacion(id_app)).start()
+    @pyqtSlot(str, str)
+    def instalar_paquete(self, id_app, nombre_app):
+        threading.Thread(target=lambda: self.ejecutar_instalacion(id_app, nombre_app)).start()
     
-    def ejecutar_instalacion(self, id_app):
+    def ejecutar_instalacion(self, id_app, nombre_app):
         proceso= subprocess.Popen(["flatpak", "install", "flathub",  id_app, "-y"])
         proceso.wait()
 
@@ -133,7 +133,7 @@ class InstalarApp(QObject):
             notification.notify(
                 app_name='FlatPik',
                 title='Installed!',
-                message= id_app + ' package is now installed on your system.',
+                message= nombre_app + ' app is now installed on your system.',
                 app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
                 timeout=20
             )

@@ -252,8 +252,8 @@ javascript= """<script>
     }
 
 
-    function instalar_paquete(id_app) {
-        objetoInstalarPaquete.instalar_paquete(id_app);
+    function instalar_paquete(id_app, nombre_app) {
+        objetoInstalarPaquete.instalar_paquete(id_app, nombre_app);
     }
 
     function abrir_web(url) {
