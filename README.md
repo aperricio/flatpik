@@ -20,6 +20,7 @@ sudo apt install python3-pyqt5.qtwebengine python3-requests python3-pyqt5
 
 * Install `flatpak` package and add Flathub PPA.
 * Install flatpak apps quickly from the "Install" button. Time will depend on package size and needed runtimes.
+* Update all flatpaks.
 * aarch64 apps only (no x86_64 apps since they're not supported on Raspberry Pi).
 * Link to detailed info on app name (official website if website-verified, else Flathub).
 
