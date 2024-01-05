@@ -25,7 +25,7 @@ class BuscarApp(QObject):
         if busqueda == "":
             contenedor_resultados = '<h2 id="h2_busqueda">Popular apps</h2>'
         else:
-            contenedor_resultados = '<h2 id="h2_busqueda">' + str(len(resultados_aarch64)) + ' results</h2>'
+            contenedor_resultados = '<h2 id="h2_busqueda">' + str(len(resultados_aarch64)) + ' results for "' + busqueda + '"</h2>'
         contenedor_resultados += '<section id="resultados">'
 
         if len(resultados_aarch64) > 0:
