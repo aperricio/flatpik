@@ -87,6 +87,12 @@ class ActualizarTodo(QObject):
         proceso.wait()
 
         if proceso.returncode == 0:
+            mensaje_informacion = QMessageBox()
+            mensaje_informacion.setIcon(QMessageBox.Information)
+            mensaje_informacion.setWindowTitle("Update all")
+            mensaje_informacion.setText('<b>Success</b>')
+            mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">All flatpaks and runtimes are up to date.")
+            mensaje_informacion.exec_()
             print("Exito")
         elif proceso.returncode == 1: #Error
             print("Error")
