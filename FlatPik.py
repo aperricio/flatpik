@@ -221,10 +221,6 @@ class InstalarApp(QObject):
         mensaje_informacion.exec_()
 
 
-
-
-
-
 class PaginaWeb(QObject):
     @pyqtSlot(str)
     def abrir_pagina_web(self, url):
