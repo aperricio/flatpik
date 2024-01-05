@@ -101,7 +101,7 @@ class ActivarSoporte(QObject):
         mensaje_informacion.setText('<b>Success</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">flatpak package installed and Flathub PPA added. You can install flatpak apps now. Reboot required.")
         mensaje_informacion.exec_()
-        BuscarApp.buscarApp("")
+        BuscarApp.buscarApp(self, "")
     @pyqtSlot()
     def mostrar_actualizacion_error(self):
         mensaje_informacion = QMessageBox()
