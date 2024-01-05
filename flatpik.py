@@ -60,22 +60,6 @@ class BuscarApp(QObject):
         view.page().setHtml(html)    
 
 
-
-"""class ActivarSoporte(QObject):
-    @pyqtSlot()
-    def activar_soporte(self):
-        threading.Thread(target=self.ejecutar_activacion).start()
-
-    def ejecutar_activacion(self):
-        proceso = subprocess.Popen("sudo apt install flatpak && flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo", shell=True)
-        proceso.wait()
-
-        if proceso.returncode == 0:
-            print("Exito")
-        elif proceso.returncode == 1: #Error
-            print("Error")
-        elif proceso.returncode == 255: #Parada manual
-            print("Parada manual")"""
 class ActivarSoporteWorker(QObject):
     activarSoporteTerminado = pyqtSignal(int)
 
@@ -117,7 +101,7 @@ class ActivarSoporte(QObject):
         mensaje_informacion.setText('<b>Success</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">flatpak package and Flathub PPA added. Yo can install flatpak apps now. Reboot required.")
         mensaje_informacion.exec_()
-
+        BuscarApp.buscarApp("")
     @pyqtSlot()
     def mostrar_actualizacion_error(self):
         mensaje_informacion = QMessageBox()

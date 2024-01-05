@@ -1,23 +1,23 @@
-#!/usr/bin/env python3
 from PyQt5 import QtGui
-from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QThread, Qt, QMetaObject
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
 from modules.assets import css, javascript
 import subprocess, threading, requests, os
 
-
 app = QApplication(["FlatPik"])
 icon = QtGui.QIcon()
 icon.addPixmap(QtGui.QPixmap("img/FlatPik.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 app.setWindowIcon(icon)
-        
+
+
 class BuscarApp(QObject):
     def __init__(self):
         super().__init__()
-        self.buscarApp("") # Se ejecuta al iniciar sin nada (muestra el apartado de "Populares")
-    @pyqtSlot(str)  
+        self.buscarApp("")
+
+    @pyqtSlot(str)
     def buscarApp(self, busqueda):
         miReq = requests.post(url='https://flathub.org/api/v2/search', json={'query': busqueda})
         resultados_aarch64 = [resultado for resultado in miReq.json()['hits'] if 'aarch64' in resultado.get('arches', [])]
@@ -60,44 +60,114 @@ class BuscarApp(QObject):
         view.page().setHtml(html)    
 
 
+class ActivarSoporteWorker(QObject):
+    activarSoporteTerminado = pyqtSignal(int)
 
-class ActivarSoporte(QObject):
     @pyqtSlot()
-    def activar_soporte(self):
-        threading.Thread(target=self.ejecutar_activacion).start()
-
     def ejecutar_activacion(self):
         proceso = subprocess.Popen("sudo apt install flatpak && flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo", shell=True)
         proceso.wait()
 
-        if proceso.returncode == 0:
-            print("Exito")
-        elif proceso.returncode == 1: #Error
-            print("Error")
-        elif proceso.returncode == 255: #Parada manual
+        self.activarSoporteTerminado.emit(proceso.returncode)
+
+class ActivarSoporte(QObject):
+    @pyqtSlot()
+    def activar_soporte(self):
+        self.hilo_activacion = QThread()
+        self.worker_activacion = ActivarSoporteWorker()
+        self.worker_activacion.moveToThread(self.hilo_activacion)
+
+        self.worker_activacion.activarSoporteTerminado.connect(self.activacion_terminada)
+
+        self.hilo_activacion.started.connect(self.worker_activacion.ejecutar_activacion)
+        self.hilo_activacion.finished.connect(self.worker_activacion.deleteLater)
+        self.hilo_activacion.finished.connect(self.hilo_activacion.deleteLater)
+
+        self.hilo_activacion.start()
+
+    def activacion_terminada(self, return_code):
+        if return_code == 0:
+            QMetaObject.invokeMethod(self, "mostrar_activacion_exito", Qt.QueuedConnection)
+        elif return_code ==1:
+            QMetaObject.invokeMethod(self, "mostrar_actualizacion_error", Qt.QueuedConnection)
+        elif return_code == 255:
             print("Parada manual")
 
-class ActualizarTodo(QObject):
     @pyqtSlot()
-    def actualizar_todo(self):
-        threading.Thread(target=self.ejecutar_actualizacion).start()
+    def mostrar_activacion_exito(self):
+        mensaje_informacion = QMessageBox()
+        mensaje_informacion.setIcon(QMessageBox.Information)
+        mensaje_informacion.setWindowTitle("Add flatpak support")
+        mensaje_informacion.setText('<b>Success</b>')
+        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">flatpak package and Flathub PPA added. Yo can install flatpak apps now. Reboot required.")
+        mensaje_informacion.exec_()
+        BuscarApp.buscarApp("")
+    @pyqtSlot()
+    def mostrar_actualizacion_error(self):
+        mensaje_informacion = QMessageBox()
+        mensaje_informacion.setIcon(QMessageBox.Information)
+        mensaje_informacion.setWindowTitle("Add flatpak support")
+        mensaje_informacion.setText('<b>Error</b>')
+        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">An error occurred during installation. Please try again.")
+        mensaje_informacion.exec_()
 
+class ActualizarTodoWorker(QObject):
+    actualizarTerminado = pyqtSignal(int)
+
+    @pyqtSlot()
     def ejecutar_actualizacion(self):
         proceso = subprocess.Popen(["flatpak", "update", "-y"])
         proceso.wait()
 
-        if proceso.returncode == 0:
-            mensaje_informacion = QMessageBox()
-            mensaje_informacion.setIcon(QMessageBox.Information)
-            mensaje_informacion.setWindowTitle("Update all")
-            mensaje_informacion.setText('<b>Success</b>')
-            mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">All flatpaks and runtimes are up to date.")
-            mensaje_informacion.exec_()
-            print("Exito")
-        elif proceso.returncode == 1: #Error
+        self.actualizarTerminado.emit(proceso.returncode)
+
+
+class ActualizarTodo(QObject):
+    #mostrarVentanaEmergente = pyqtSignal()
+
+    @pyqtSlot()
+    def actualizar_todo(self):
+        self.hilo_actualizacion = QThread()
+        self.worker_actualizacion = ActualizarTodoWorker()
+        self.worker_actualizacion.moveToThread(self.hilo_actualizacion)
+
+        self.worker_actualizacion.actualizarTerminado.connect(self.actualizacion_terminada)
+
+        self.hilo_actualizacion.started.connect(self.worker_actualizacion.ejecutar_actualizacion)
+        self.hilo_actualizacion.finished.connect(self.worker_actualizacion.deleteLater)
+        self.hilo_actualizacion.finished.connect(self.hilo_actualizacion.deleteLater)
+
+        self.hilo_actualizacion.start()
+
+    def actualizacion_terminada(self, return_code):
+        if return_code == 0:
+            QMetaObject.invokeMethod(self, "mostrar_actualizacion_exito", Qt.QueuedConnection)
+            print("Éxito")
+        elif return_code == 1:  # Error
+            QMetaObject.invokeMethod(self, "mostrar_actualizacion_error", Qt.QueuedConnection)
             print("Error")
-        elif proceso.returncode == 255: #Parada manual
+        elif return_code == 255:  # Parada manual
             print("Parada manual")
+
+    @pyqtSlot()
+    def mostrar_actualizacion_exito(self):
+        mensaje_informacion = QMessageBox()
+        mensaje_informacion.setIcon(QMessageBox.Information)
+        mensaje_informacion.setWindowTitle("Update all")
+        mensaje_informacion.setText('<b>Success</b>')
+        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">All flatpaks and runtimes are up to date.")
+        mensaje_informacion.exec_()
+
+    @pyqtSlot()
+    def mostrar_actualizacion_error(self):
+        mensaje_informacion = QMessageBox()
+        mensaje_informacion.setIcon(QMessageBox.Information)
+        mensaje_informacion.setWindowTitle("Update all")
+        mensaje_informacion.setText('<b>Error</b>')
+        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">An error occurred during the update. Please try again.")
+        mensaje_informacion.exec_()
+
+
 
     
 class InstalarApp(QObject):
