@@ -222,21 +222,21 @@ class InstalarApp(QObject):
             print("Parada manual")
 
     @pyqtSlot()
-    def mostrar_instalacion_exito(self, nombre_app):
+    def mostrar_instalacion_exito(self):
         mensaje_informacion = QMessageBox()
         mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Install app")
         mensaje_informacion.setText('<b>Success</b>')
-        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">The app " + nombre_app + " is now installed.")
+        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">The app is now installed.")
         mensaje_informacion.exec_()
 
     @pyqtSlot()
-    def mostrar_instalacion_error(self, nombre_app):
+    def mostrar_instalacion_error(self):
         mensaje_informacion = QMessageBox()
         mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Install app")
         mensaje_informacion.setText('<b>Error</b>')
-        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">The app " + nombre_app + " failed to install. Try again, please.")
+        mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">The app failed to install. Try again, please.")
         mensaje_informacion.exec_()
 
 class PaginaWeb(QObject):
