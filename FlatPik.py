@@ -169,23 +169,6 @@ class ActualizarTodo(QObject):
 
 
 
-    
-""" class InstalarApp(QObject):
-    @pyqtSlot(str, str)
-    def instalar_paquete(self, id_app, nombre_app):
-        threading.Thread(target=lambda: self.ejecutar_instalacion(id_app, nombre_app)).start()
-    
-    def ejecutar_instalacion(self, id_app, nombre_app):
-        proceso= subprocess.Popen(["flatpak", "install", "flathub",  id_app, "-y"])
-        proceso.wait()
-
-        if proceso.returncode == 0:
-            print("Exito")
-        elif proceso.returncode == 1: #Error
-            print("Error")
-        elif proceso.returncode == 255: #Parada manual
-            print("Parada manual") """
-
 class InstalarAppWorker(QThread):
     instalarAppTerminado = pyqtSignal(int)
 
