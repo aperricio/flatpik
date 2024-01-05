@@ -32,7 +32,6 @@ This is a work in progress; not finished at all. Coming soon:
 
 * [x] App icon for FlatPik.
 * [X] App name opens website (flathub if not verified by website)
-* [x] System notifications when installs/updates finish.
 * [ ] Info about install progress.
 * [x] Update all flatpaks.
 ### Maybe: 
