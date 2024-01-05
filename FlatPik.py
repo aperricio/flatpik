@@ -1,5 +1,5 @@
 from PyQt5 import QtGui
-from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QThread, Qt, QMetaObject
+from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QThread, Qt, QMetaObject, QRunnable, QThreadPool
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
@@ -186,31 +186,29 @@ class ActualizarTodo(QObject):
         elif proceso.returncode == 255: #Parada manual
             print("Parada manual") """
 
-class InstalarAppWorker(QObject):
+class InstalarAppWorker(QThread):
     instalarAppTerminado = pyqtSignal(int)
 
-    @pyqtSlot()
-    def ejecutar_instalacion(self, id_app, nombre_app):
-        proceso= subprocess.Popen(["flatpak", "install", "flathub",  id_app, "-y"])
-        proceso.wait()
+    def __init__(self, id_app):
+        super().__init__()
+        self.id_app = id_app
 
+    def run(self):
+        proceso = subprocess.Popen(["flatpak", "install", "flathub", self.id_app, "-y"])
+        proceso.wait()
         self.instalarAppTerminado.emit(proceso.returncode)
 
 class InstalarApp(QObject):
-    @pyqtSlot()
-    def instalar_paquete(self):
-        self.hilo_instalacion = QThread()
-        self.worker_instalacion = InstalarAppWorker()
-        self.worker_instalacion.moveToThread(self.hilo_instalacion)
+    def __init__(self):
+        super().__init__()
+        self.worker_instalacion = None  # Mantenemos una referencia al trabajador para evitar que se elimine demasiado pronto
 
+    @pyqtSlot(str, str)
+    def instalar_paquete(self, id_app):
+        self.worker_instalacion = InstalarAppWorker(id_app)
         self.worker_instalacion.instalarAppTerminado.connect(self.instalacion_terminada)
+        self.worker_instalacion.start()
 
-        self.hilo_instalacion.started.connect(self.worker_instalacion.ejecutar_instalacion)
-        self.hilo_instalacion.finished.connect(self.worker_instalacion.deleteLater)
-        self.hilo_instalacion.finished.connect(self.hilo_instalacion.deleteLater)
-
-        self.hilo_instalacion.start()
-    
     def instalacion_terminada(self, return_code):
         if return_code == 0:
             QMetaObject.invokeMethod(self, "mostrar_instalacion_exito", Qt.QueuedConnection)
@@ -238,6 +236,11 @@ class InstalarApp(QObject):
         mensaje_informacion.setText('<b>Error</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">The app failed to install. Try again, please.")
         mensaje_informacion.exec_()
+
+
+
+
+
 
 class PaginaWeb(QObject):
     @pyqtSlot(str)
