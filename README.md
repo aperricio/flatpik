@@ -32,7 +32,7 @@ This is a work in progress; not finished at all. Coming soon:
 
 * [x] App icon for FlatPik.
 * [X] App name opens website (flathub if not verified by website)
-* [ ] Info about install progress.
+* [ ] Info about install progress (or something).
 * [x] Update all flatpaks and runtimes.
 ### Maybe: 
 * [ ] Uninstall button.
