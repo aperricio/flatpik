@@ -5,7 +5,6 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
 from modules.assets import css, javascript
-from plyer import notification
 import subprocess, threading, requests, os
 
 
@@ -72,21 +71,9 @@ class ActivarSoporte(QObject):
         proceso.wait()
 
         if proceso.returncode == 0:
-            notification.notify(
-                app_name='FlatPik',
-                title='Success',
-                message='flatpak package and Flathub PPA are now on your system. Reboot to start installing flatpaks.',
-                app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
-                timeout=20
-            )
+            print("Exito")
         elif proceso.returncode == 1: #Error
-            notification.notify(
-                app_name='FlatPik',
-                title='Error',
-                message='An error ocurred at the process. Try again, please.',
-                app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
-                timeout=20
-            )
+            print("Error")
         elif proceso.returncode == 255: #Parada manual
             print("Parada manual")
 
@@ -100,21 +87,8 @@ class ActualizarTodo(QObject):
         proceso.wait()
 
         if proceso.returncode == 0:
-            notification.notify(
-                app_name='FlatPik',
-                title='Success',
-                message='All flatpaks and runtimes are up to date.',
-                app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
-                timeout=20
-            )
+            print("Exito")
         elif proceso.returncode == 1: #Error
-            notification.notify(
-                app_name='FlatPik',
-                title='Error',
-                message='Error while updating. Try again, please.',
-                app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
-                timeout=20
-            )
             print("Error")
         elif proceso.returncode == 255: #Parada manual
             print("Parada manual")
@@ -130,21 +104,8 @@ class InstalarApp(QObject):
         proceso.wait()
 
         if proceso.returncode == 0:
-            notification.notify(
-                app_name='FlatPik',
-                title='Installed!',
-                message= nombre_app + ' app is now installed on your system.',
-                app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
-                timeout=20
-            )
+            print("Exito")
         elif proceso.returncode == 1: #Error
-            notification.notify(
-                app_name='FlatPik',
-                title='Error',
-                message='Error at installation. Try again, please.',
-                app_icon = str(os.path.dirname(__file__))+"/img/FlatPik.png",
-                timeout=20
-            )
             print("Error")
         elif proceso.returncode == 255: #Parada manual
             print("Parada manual")
