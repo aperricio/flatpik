@@ -16,6 +16,28 @@ Or
 sudo apt install python3-pyqt5.qtwebengine python3-requests python3-pyqt5
 ```
 
+```mermaid
+graph TD
+A[Tipos] --> B(Numéricos) 
+A --> C(Textos)
+A -->D(Booleanos)
+B -->E(Enteros\nint)
+B -->F(Coma flotante\nfloat)
+B-->G(Complejos)
+D-->H(true)
+D-->I(false)
+
+style A fill:purple;
+style B fill:green;
+style C fill:green;
+style D fill:green;
+style E fill:darkblue;
+style F fill:darkblue;
+style G fill:darkblue;
+style H fill:darkblue;
+style I fill:darkblue;
+```
+
 ## Features
 
 * Install `flatpak` package and add Flathub PPA.
