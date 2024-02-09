@@ -5,6 +5,8 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
 from modules.assets import css, javascript
 import subprocess, threading, requests, os
+import webbrowser
+
 
 app = QApplication(["FlatPik"])
 icon = QtGui.QIcon()
@@ -228,9 +230,12 @@ class PaginaWeb(QObject):
     @pyqtSlot(str)
     def abrir_pagina_web(self, url):
         try: 
-            subprocess.Popen(["chromium-browser", url])
-        except FileNotFoundError:
-            subprocess.Popen(["firefox", url])
+            webbrowser.open(url)
+        except:
+            try: 
+                subprocess.Popen(["chromium-browser", url])
+            except FileNotFoundError:
+                subprocess.Popen(["firefox", url])
 
 
 visor = QWidget()
