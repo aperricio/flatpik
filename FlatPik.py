@@ -10,7 +10,7 @@ import webbrowser
 
 app = QApplication(["FlatPik"])
 icon = QtGui.QIcon()
-icon.addPixmap(QtGui.QPixmap("img/FlatPik.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
+icon.addPixmap(QtGui.QPixmap("img/FlatPik.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 app.setWindowIcon(icon)
 
 
