@@ -16,7 +16,6 @@ Or
 sudo apt install python3-pyqt5.qtwebengine python3-requests python3-pyqt5
 ```
 
-
 ## Features
 
 * Install `flatpak` package and add Flathub PPA.
