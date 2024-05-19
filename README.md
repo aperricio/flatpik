@@ -26,13 +26,7 @@ sudo apt install python3-pyqt5.qtwebengine python3-requests python3-pyqt5
 
 ![Captura de FlatPik](img/popular-apps.png)
 
-## Roadmap
-
-This is a work in progress; not finished at all. Coming soon:
-
-* [ ] Info about install progress (or something).
-
-### Maybe: 
+## Roadmap (maybe): 
 
 * [ ] Uninstall button.
 * [ ] Light theme.

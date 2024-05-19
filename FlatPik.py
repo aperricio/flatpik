@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import QObject, pyqtSlot, pyqtSignal, QThread, Qt, QMetaObject, Q_ARG
 from PyQt6.QtWebChannel import QWebChannel
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
+from PyQt6.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox, QStatusBar
 from modules.assets import css, javascript
 import subprocess, requests, os
 import webbrowser
@@ -118,6 +118,9 @@ class ActualizarTodoWorker(QObject):
 
     @pyqtSlot()
     def ejecutar_actualizacion(self):
+        status_bar.setFixedHeight(20)
+        layout.addWidget(status_bar, 1, 0, 1, -1)
+        status_bar.showMessage("Adding flatpak support. Please, wait.")
         proceso = subprocess.Popen(["flatpak", "update", "-y"])
         proceso.wait()
 
@@ -156,6 +159,7 @@ class ActualizarTodo(QObject):
         mensaje_informacion.setWindowTitle("Update all")
         mensaje_informacion.setText('<b>Success</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">All flatpaks and runtimes are up to date.")
+        status_bar.hide()
         mensaje_informacion.exec()
 
     @pyqtSlot()
@@ -165,6 +169,7 @@ class ActualizarTodo(QObject):
         mensaje_informacion.setWindowTitle("Update all")
         mensaje_informacion.setText('<b>Error</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">An error occurred during the update. Please try again.")
+        status_bar.hide()
         mensaje_informacion.exec()
 
 
@@ -178,6 +183,10 @@ class InstalarAppWorker(QThread):
         self.nombre_app = nombre_app
 
     def run(self):
+        status_bar.setFixedHeight(20)
+        layout.addWidget(status_bar, 1, 0, 1, -1)
+        mensaje="Installing " + self.nombre_app + ". Please, wait."
+        status_bar.showMessage(mensaje)
         proceso = subprocess.Popen(["flatpak", "install", "--system", "flathub", self.id_app, "-y"])
         proceso.wait()
         self.instalarAppTerminado.emit(proceso.returncode, self.nombre_app)
@@ -211,6 +220,7 @@ class InstalarApp(QObject):
         mensaje_informacion.setWindowTitle("Install app")
         mensaje_informacion.setText('<b>Success</b>')
         mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">{nombre_app} app is now installed.")
+        status_bar.hide()
         mensaje_informacion.exec()
 
     @pyqtSlot(str)
@@ -220,6 +230,7 @@ class InstalarApp(QObject):
         mensaje_informacion.setWindowTitle("Install app")
         mensaje_informacion.setText('<b>Error</b>')
         mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">Failed to install {nombre_app} app. Try again, please.")
+        status_bar.hide()
         mensaje_informacion.exec()
 
 
@@ -241,6 +252,9 @@ visor = QWidget()
 layout = QGridLayout()
 layout.setContentsMargins(0, 0, 0, 0)
 visor.setLayout(layout)
+
+
+status_bar = QStatusBar()
 
 view = QWebEngineView()
 channel = QWebChannel()
