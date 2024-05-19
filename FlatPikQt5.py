@@ -1,16 +1,16 @@
-from PyQt6 import QtGui
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import QObject, pyqtSlot, pyqtSignal, QThread, Qt, QMetaObject, Q_ARG
-from PyQt6.QtWebChannel import QWebChannel
-from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
+from PyQt5 import QtGui
+from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QThread, Qt, QMetaObject, QRunnable, QThreadPool, Q_ARG
+from PyQt5.QtWebChannel import QWebChannel
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
+from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QMessageBox
 from modules.assets import css, javascript
-import subprocess, requests, os
+import subprocess, threading, requests, os
 import webbrowser
+
 
 app = QApplication(["FlatPik"])
 icon = QtGui.QIcon()
-icon.addPixmap(QPixmap("img/FlatPik.png"))
+icon.addPixmap(QtGui.QPixmap("img/FlatPik.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 app.setWindowIcon(icon)
 
 
@@ -89,29 +89,29 @@ class ActivarSoporte(QObject):
 
     def activacion_terminada(self, return_code):
         if return_code == 0:
-            QMetaObject.invokeMethod(self, "mostrar_activacion_exito", Qt.ConnectionType.QueuedConnection)
+            QMetaObject.invokeMethod(self, "mostrar_activacion_exito", Qt.QueuedConnection)
         elif return_code ==1:
-            QMetaObject.invokeMethod(self, "mostrar_actualizacion_error", Qt.ConnectionType.QueuedConnection)
+            QMetaObject.invokeMethod(self, "mostrar_actualizacion_error", Qt.QueuedConnection)
         elif return_code == 255:
             print("Parada manual")
 
     @pyqtSlot()
     def mostrar_activacion_exito(self):
         mensaje_informacion = QMessageBox()
-        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Add flatpak support")
         mensaje_informacion.setText('<b>Success</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">flatpak package installed and Flathub PPA added. You can install flatpak apps now.<br><br>Reboot required.")
-        mensaje_informacion.exec()
+        mensaje_informacion.exec_()
         BuscarApp.buscarApp(self, "")
     @pyqtSlot()
     def mostrar_actualizacion_error(self):
         mensaje_informacion = QMessageBox()
-        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Add flatpak support")
         mensaje_informacion.setText('<b>Error</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">An error occurred during installation. Please try again.")
-        mensaje_informacion.exec()
+        mensaje_informacion.exec_()
 
 class ActualizarTodoWorker(QObject):
     actualizarTerminado = pyqtSignal(int)
@@ -125,6 +125,8 @@ class ActualizarTodoWorker(QObject):
 
 
 class ActualizarTodo(QObject):
+    #mostrarVentanaEmergente = pyqtSignal()
+
     @pyqtSlot()
     def actualizar_todo(self):
         self.hilo_actualizacion = QThread()
@@ -141,10 +143,10 @@ class ActualizarTodo(QObject):
 
     def actualizacion_terminada(self, return_code):
         if return_code == 0:
-            QMetaObject.invokeMethod(self, "mostrar_actualizacion_exito", Qt.ConnectionType.QueuedConnection)
+            QMetaObject.invokeMethod(self, "mostrar_actualizacion_exito", Qt.QueuedConnection)
             print("Éxito")
         elif return_code == 1:  # Error
-            QMetaObject.invokeMethod(self, "mostrar_actualizacion_error", Qt.ConnectionType.QueuedConnection)
+            QMetaObject.invokeMethod(self, "mostrar_actualizacion_error", Qt.QueuedConnection)
             print("Error")
         elif return_code == 255:  # Parada manual
             print("Parada manual")
@@ -152,20 +154,20 @@ class ActualizarTodo(QObject):
     @pyqtSlot()
     def mostrar_actualizacion_exito(self):
         mensaje_informacion = QMessageBox()
-        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Update all")
         mensaje_informacion.setText('<b>Success</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">All flatpaks and runtimes are up to date.")
-        mensaje_informacion.exec()
+        mensaje_informacion.exec_()
 
     @pyqtSlot()
     def mostrar_actualizacion_error(self):
         mensaje_informacion = QMessageBox()
-        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Update all")
         mensaje_informacion.setText('<b>Error</b>')
         mensaje_informacion.setInformativeText("<p style=\"margin-right:25px\">An error occurred during the update. Please try again.")
-        mensaje_informacion.exec()
+        mensaje_informacion.exec_()
 
 
 
@@ -178,7 +180,7 @@ class InstalarAppWorker(QThread):
         self.nombre_app = nombre_app
 
     def run(self):
-        proceso = subprocess.Popen(["flatpak", "install", "--system", "flathub", self.id_app, "-y"])
+        proceso = subprocess.Popen(["flatpak", "install", "flathub", self.id_app, "-y"])
         proceso.wait()
         self.instalarAppTerminado.emit(proceso.returncode, self.nombre_app)
 
@@ -195,11 +197,11 @@ class InstalarApp(QObject):
 
     def instalacion_terminada(self, return_code, nombre_app):
         if return_code == 0:
-            QMetaObject.invokeMethod(self, "mostrar_instalacion_exito", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
+            QMetaObject.invokeMethod(self, "mostrar_instalacion_exito", Qt.QueuedConnection, Q_ARG(str, nombre_app))
             print("Éxito")
             print("Nombre de la aplicación:", nombre_app)
         elif return_code == 1:
-            QMetaObject.invokeMethod(self, "mostrar_instalacion_error", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
+            QMetaObject.invokeMethod(self, "mostrar_instalacion_error", Qt.QueuedConnection, Q_ARG(str, nombre_app))
             print("Error")
         elif return_code == 255:
             print("Parada manual")
@@ -207,20 +209,20 @@ class InstalarApp(QObject):
     @pyqtSlot(str)
     def mostrar_instalacion_exito(self, nombre_app):
         mensaje_informacion = QMessageBox()
-        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Install app")
         mensaje_informacion.setText('<b>Success</b>')
         mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">{nombre_app} app is now installed.")
-        mensaje_informacion.exec()
+        mensaje_informacion.exec_()
 
     @pyqtSlot(str)
     def mostrar_instalacion_error(self, nombre_app):
         mensaje_informacion = QMessageBox()
-        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setIcon(QMessageBox.Information)
         mensaje_informacion.setWindowTitle("Install app")
         mensaje_informacion.setText('<b>Error</b>')
         mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">Failed to install {nombre_app} app. Try again, please.")
-        mensaje_informacion.exec()
+        mensaje_informacion.exec_()
 
 
 
@@ -243,8 +245,9 @@ layout.setContentsMargins(0, 0, 0, 0)
 visor.setLayout(layout)
 
 view = QWebEngineView()
+page = QWebEnginePage(view)
 channel = QWebChannel()
-view.page().setWebChannel(channel)
+page.setWebChannel(channel)
 botonActivarSoporte = ActivarSoporte()
 channel.registerObject("botonInstalarFlatpak", botonActivarSoporte)
 botonBuscarApp = BuscarApp()
@@ -255,6 +258,7 @@ botonAbrirWeb = PaginaWeb()
 channel.registerObject("botonAbrirWeb", botonAbrirWeb)
 botonActualizarTodo = ActualizarTodo()
 channel.registerObject("botonActualizarTodo", botonActualizarTodo)
+view.setPage(page)
 view.page().setHtml(html)                    
 
 layout.addWidget(view, 0, 0, 1, 1)
@@ -262,4 +266,4 @@ visor.setMinimumSize(400, 500)
 visor.setGeometry(0, 0, 1256, 720)
 
 visor.show()
-app.exec()
+app.exec_()
