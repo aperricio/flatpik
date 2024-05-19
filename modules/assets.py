@@ -242,8 +242,9 @@ javascript= """<script>
         objetoInstalarFlatpak.activar_soporte();
     }
 
-     function actualizar_todo() {
+    function actualizar_todo() {
         objetoActualizarTodo.actualizar_todo();
+        document.getElementById('actualizar').style.display= "none"
     }
 
     function enviar_busqueda() {
