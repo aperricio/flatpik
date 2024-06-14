@@ -13,6 +13,40 @@ icon = QtGui.QIcon()
 icon.addPixmap(QPixmap("img/FlatPik.png"))
 app.setWindowIcon(icon)
 
+conf = os.path.expanduser("~/.config/FlatPik/claro.txt")
+conf_dir = os.path.expanduser("~/.config/FlatPik/")
+
+def comprobar_tema():
+    global tema
+    global sol_o_luna
+    if os.path.exists(conf):
+        sol_o_luna = "☾"
+        tema = """
+    :root {
+        --fondo: #EEE;
+        --fondo2: #CCC;
+        --fondo3: #888;
+        --fondo4: #A5A5A5;
+        --fondoBusqueda: #151515;
+        --fondoArticle: #B5B5B5;
+        --texto: #CD2355;
+    }
+    """
+    else:
+        sol_o_luna = "☼"
+        tema = """
+    :root {
+        --fondo: #1D1D1D;
+        --fondo2: #111;
+        --fondo3: #1f1f1f;
+        --fondo4: #555;
+        --fondoBusqueda: #151515;
+        --fondoArticle: #161616;
+        --texto: #CD2355;
+    }
+    """
+
+comprobar_tema()
 
 class BuscarApp(QObject):
     def __init__(self):
@@ -21,6 +55,7 @@ class BuscarApp(QObject):
 
     @pyqtSlot(str)
     def buscarApp(self, busqueda):
+        comprobar_tema()
         miReq = requests.post(url='https://flathub.org/api/v2/search', json={'query': busqueda})
         resultados_aarch64 = [resultado for resultado in miReq.json()['hits'] if 'aarch64' in resultado.get('arches', [])]
 
@@ -50,14 +85,13 @@ class BuscarApp(QObject):
 
         boton_soporte = """<button id="actualizar" onclick="actualizar_todo()">&#10227;</button><span id="tipactualizartodo">Update all</span>""" if os.path.exists("/usr/bin/flatpak") else '<button id="soporte" onclick="activar_soporte()">&#9881;</button><span id="tipsoporte">Add flatpak support</span>'
         global html
-        html = css + """
+        html = "<style>" + tema + css + """
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
 <body> """ + boton_soporte + """
 <button onclick="funcionArriba()" id="botonArriba">&#8593;</button>
 <header id="h1_flatpik"><h1>FlatPik</h1></header>
-<section id="buscar"><input type="text" id="busqueda"><button id="enviar_busqueda" onclick="enviar_busqueda()">&#8618;</button></section>
-<span id="interruptor" onclick="cambiarTema()">☼</span>
-""" + contenedor_resultados + javascript + '</body>'
+<section id="buscar"><input type="text" id="busqueda" value=""" + "\""+busqueda+"\"" +"""><button id="enviar_busqueda" onclick="enviar_busqueda()">&#8618;</button></section>
+<span id="interruptor" onclick="cambiarTema()">""" + sol_o_luna +"</span>" + contenedor_resultados + javascript + '</body>'
 
 
         view.page().setHtml(html)    
@@ -249,6 +283,18 @@ class PaginaWeb(QObject):
                 subprocess.Popen(["firefox", url])
 
 
+class CambiarTema(QObject):
+    @pyqtSlot()
+    def cambiar_tema(self):
+        global tema
+        if not os.path.exists(conf):
+            if not conf_dir:
+                os.system("mkdir ~/.config/FlatPik")
+            os.system("touch " + conf)
+        else:
+            os.system("rm " + conf)
+            
+
 visor = QWidget()
 
 layout = QGridLayout()
@@ -273,6 +319,8 @@ botonAbrirWeb = PaginaWeb()
 channel.registerObject("botonAbrirWeb", botonAbrirWeb)
 botonActualizarTodo = ActualizarTodo()
 channel.registerObject("botonActualizarTodo", botonActualizarTodo)
+botonCambiarTema = CambiarTema()
+channel.registerObject("botonCambiarTema", botonCambiarTema)
 view.page().setHtml(html)                    
 
 layout.addWidget(view, 0, 0, 1, 1)

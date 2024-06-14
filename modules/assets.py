@@ -1,26 +1,4 @@
-css = """<style>
-
-    @media (prefers-color-scheme: light) {
-        :root {
-            --fondo: #EEE;
-            --fondo2: #CCC;
-            --fondo3: #888;
-            --fondo4: #A5A5A5;
-            --fondoArticle: #B5B5B5;
-        }
-    }
-
-    :root {
-        --fondo: #1D1D1D;
-        --fondo2: #111;
-        --fondo3: #1f1f1f;
-        --fondo4: #555;
-        --fondoBusqueda: #151515;
-        --fondoArticle: #161616;
-        --texto: #CD2355;
-    }
-    
-
+css = """
     body {
         background-color: var(--fondo);
         color: var(--texto);
@@ -253,7 +231,7 @@ css = """<style>
 
 javascript= """<script>
      setTimeout(function() {
-        document.getElementById("busqueda").focus();
+        document.getElementById("busqueda").select();
     }, 100); 
 
     let objetoInstalarFlatpak = null;
@@ -261,12 +239,14 @@ javascript= """<script>
     let objetoInstalarPaquete = null;
     let objetoAbrirWeb = null;
     let objetoActualizarTodo = null;
+    let objetoCambiarTema = null;
     new QWebChannel(qt.webChannelTransport, function (channel) {
         objetoInstalarFlatpak = channel.objects.botonInstalarFlatpak;
         objetoBuscar = channel.objects.botonBuscar;
         objetoInstalarPaquete = channel.objects.botonInstalarPaquete;
         objetoAbrirWeb = channel.objects.botonAbrirWeb;
         objetoActualizarTodo = channel.objects.botonActualizarTodo;
+        objetoCambiarTema = channel.objects.botonCambiarTema;
     });
 
     function activar_soporte() {
@@ -335,32 +315,9 @@ javascript= """<script>
     }
 
 
-    let tema="oscuro"
-    let html = document.querySelector("html");
-    let interruptor = document.getElementById("interruptor")
     function cambiarTema() {
-        if(tema=="oscuro") {
-            interruptor.innerHTML="☾";
-            interruptor.style.fontSize="1.3rem";
-            interruptor.style.top="4";
-            html.style.setProperty("--fondo","#EEE");
-            html.style.setProperty("--fondo2","#CCC");
-            html.style.setProperty("--fondo3","#888");
-            html.style.setProperty("--fondo4","#A5A5A5");
-            html.style.setProperty("--fondoArticle","#B5B5B5");
-            tema="claro";
-        } else {
-            interruptor.innerHTML="☼";
-            interruptor.style.fontSize="1.5rem";
-            interruptor.style.right="5";
-            interruptor.style.top="2";
-            html.style.setProperty("--fondo","#1D1D1D");
-            html.style.setProperty("--fondo2","#111");
-            html.style.setProperty("--fondo3","#1F1F1F");
-            html.style.setProperty("--fondo4","#555");
-            html.style.setProperty("--fondoArticle","#161616");
-            tema="oscuro"
-        }
+        objetoCambiarTema.cambiar_tema();
+        enviar_busqueda();
     }
 
 </script>"""
