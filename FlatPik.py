@@ -71,11 +71,15 @@ class BuscarApp(QObject):
                 icono = resultado['icon'] 
                 descripcion_corta = resultado['summary']
                 app_id = resultado['app_id']
+                if os.path.exists("/var/lib/flatpak/app/" + app_id):
+                    boton_instalar_desinstalar = '<button class="desinstalar" onclick="desinstalar_paquete(\'' + app_id + '\', \'' + nombre +'\')">✗</button>'
+                else: 
+                    boton_instalar_desinstalar = '<button class="instalar" onclick="instalar_paquete(\'' + app_id + '\', \'' + nombre +'\')">&#10225;</button>'
                 pagina_web = resultado['verification_website'] if resultado['verification_website'] != None else "https://flathub.org/apps/" + app_id
                 verificada = resultado['verification_verified']
                 marca_verificacion = ' <span class="uve">&#10003;</span><span class="verificada">erified</span>' if verificada == 'true' else ''
                 try:
-                    contenedor_resultados += '<article><img src="' + icono + '"><h2 onclick="abrir_web(\'' + pagina_web + '\')">' + nombre + marca_verificacion + '</h2><button class="instalar" onclick="instalar_paquete(\'' + app_id + '\', \'' + nombre +'\')">&#10225;</button><p>' + descripcion_corta + '</p></article>'
+                    contenedor_resultados += '<article><img src="' + icono + '"><h2 onclick="abrir_web(\'' + pagina_web + '\')">' + nombre + marca_verificacion + '</h2>' + boton_instalar_desinstalar + '<p>' + descripcion_corta + '</p></article>'
                 except TypeError:
                     """Error que no debería saltar al realizar algunas búsquedas"""
         else:
@@ -210,7 +214,6 @@ class ActualizarTodo(QObject):
         mensaje_informacion.exec()
 
 
-
 class InstalarAppWorker(QThread):
     instalarAppTerminado = pyqtSignal(int, str)
 
@@ -270,6 +273,75 @@ class InstalarApp(QObject):
         mensaje_informacion.exec()
 
 
+class DesinstalarAppWorker(QThread):
+    desinstalarAppTerminado = pyqtSignal(int, str)
+
+    def __init__(self, id_app, nombre_app):
+        super().__init__()
+        self.id_app = id_app
+        self.nombre_app = nombre_app
+
+    def run(self):
+        layout.addWidget(status_bar, 1, 0, 1, -1)
+        mensaje="Uninstalling " + self.nombre_app + ". Please, wait."
+        status_bar.showMessage(mensaje)
+        proceso = subprocess.Popen(["flatpak", "uninstall", "--system", "flathub", self.id_app, "-y"])
+        proceso.wait()
+        self.desinstalarAppTerminado.emit(proceso.returncode, self.nombre_app)
+
+class DesinstalarApp(QObject):
+    def __init__(self):
+        super().__init__()
+        self.worker_desinstalacion = None
+
+    @pyqtSlot(str, str)
+    def desinstalar_paquete(self, id_app, nombre_app):
+        self.worker_desinstalacion = DesinstalarAppWorker(id_app, nombre_app)
+        self.worker_desinstalacion.desinstalarAppTerminado.connect(self.desinstalacion_terminada)
+        self.worker_desinstalacion.start()
+
+    def desinstalacion_terminada(self, return_code, nombre_app):
+        if return_code == 0:
+            QMetaObject.invokeMethod(self, "mostrar_desinstalacion_exito", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
+            print("Éxito")
+            print("Nombre de la aplicación:", nombre_app)
+        elif return_code == 1:
+            QMetaObject.invokeMethod(self, "mostrar_desinstalacion_error", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
+            print("Error")
+        elif return_code == 255:
+            print("Parada manual")
+        
+        
+        
+
+    @pyqtSlot(str)
+    def mostrar_desinstalacion_exito(self, nombre_app):
+        mensaje_informacion = QMessageBox()
+        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setWindowTitle("Uninstall app")
+        mensaje_informacion.setText('<b>Success</b>')
+        mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">{nombre_app} app is now uninstalled. Run \"flatpak uninstall --unused --delete-data -y\" to delete app configuration.")
+        layout.addWidget(status_bar, 1, 0, 0, -1)
+        mensaje_informacion.exec()
+
+    @pyqtSlot(str)
+    def mostrar_desinstalacion_error(self, nombre_app):
+        mensaje_informacion = QMessageBox()
+        mensaje_informacion.setIcon(QMessageBox.Icon.Information)
+        mensaje_informacion.setWindowTitle("Uninstall app")
+        mensaje_informacion.setText('<b>Error</b>')
+        mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">Failed to uninstall {nombre_app} app. Try again, please.")
+        layout.addWidget(status_bar, 1, 0, 0, -1)
+        mensaje_informacion.exec()
+
+
+
+
+
+
+
+
+
 
 class PaginaWeb(QObject):
     @pyqtSlot(str)
@@ -315,6 +387,8 @@ botonBuscarApp = BuscarApp()
 channel.registerObject("botonBuscar", botonBuscarApp)
 botonInstalarApp = InstalarApp()
 channel.registerObject("botonInstalarPaquete", botonInstalarApp)
+botonDesinstalarApp = DesinstalarApp()
+channel.registerObject("botonDesinstalarPaquete", botonDesinstalarApp)
 botonAbrirWeb = PaginaWeb()
 channel.registerObject("botonAbrirWeb", botonAbrirWeb)
 botonActualizarTodo = ActualizarTodo()

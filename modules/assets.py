@@ -60,7 +60,7 @@ css = """
         outline: none;
     }
 
-    #buscar button:focus, .instalar:focus {
+    #buscar button:focus, .instalar:focus, .desinstalar:focus {
         outline: none;
         box-shadow: 1px 1px 3px grey
     }
@@ -92,7 +92,7 @@ css = """
         outline: none
     }
 
-    #soporte:hover, #actualizar:hover, #buscar button:hover, .instalar:hover, #botonArriba:hover {
+    #soporte:hover, #actualizar:hover, #buscar button:hover, .instalar:hover, .desinstalar:hover, #botonArriba:hover {
         background-color: var(--texto);
         border: 2px solid var(--texto);
         color: var(--fondo3);
@@ -187,7 +187,7 @@ css = """
         padding-top: 10px
     }
 
-    .instalar {
+    .instalar, .desinstalar{
         background-color: var(--fondo3);
         border: 2px solid var(--texto);
         color: var(--texto);
@@ -237,6 +237,7 @@ javascript= """<script>
     let objetoInstalarFlatpak = null;
     let objetoBuscar = null;
     let objetoInstalarPaquete = null;
+    let objetoDesinstalarPaquete = null;
     let objetoAbrirWeb = null;
     let objetoActualizarTodo = null;
     let objetoCambiarTema = null;
@@ -244,6 +245,7 @@ javascript= """<script>
         objetoInstalarFlatpak = channel.objects.botonInstalarFlatpak;
         objetoBuscar = channel.objects.botonBuscar;
         objetoInstalarPaquete = channel.objects.botonInstalarPaquete;
+        objetoDesinstalarPaquete = channel.objects.botonDesinstalarPaquete;
         objetoAbrirWeb = channel.objects.botonAbrirWeb;
         objetoActualizarTodo = channel.objects.botonActualizarTodo;
         objetoCambiarTema = channel.objects.botonCambiarTema;
@@ -266,6 +268,10 @@ javascript= """<script>
 
     function instalar_paquete(id_app, nombre_app) {
         objetoInstalarPaquete.instalar_paquete(id_app, nombre_app);
+    }
+
+    function desinstalar_paquete(id_app, nombre_app) {
+        objetoDesinstalarPaquete.desinstalar_paquete(id_app, nombre_app);
     }
 
     function abrir_web(url) {

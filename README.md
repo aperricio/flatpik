@@ -24,10 +24,7 @@ sudo apt install python3-pyqt6.qtwebengine python3-requests python3-pyqt6
 * Update all flatpaks at once.
 * aarch64 apps only (no x86_64 apps since they're not supported on Raspberry Pi).
 * Link to detailed info on app name (official website if website-verified, else Flathub).
+* Uninstall button.
 * Dark/Light theme.
 
 ![Captura de FlatPik](img/popular-apps.png)
-
-## Roadmap (maybe): 
-
-* [ ] Uninstall button.
