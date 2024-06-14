@@ -290,8 +290,6 @@ javascript= """<script>
         }
     });
 
-
-
     window.onscroll = function() {
         scrollFunction();
         volverArriba()

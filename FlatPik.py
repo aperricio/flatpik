@@ -186,10 +186,8 @@ class ActualizarTodo(QObject):
     def actualizacion_terminada(self, return_code):
         if return_code == 0:
             QMetaObject.invokeMethod(self, "mostrar_actualizacion_exito", Qt.ConnectionType.QueuedConnection)
-            print("Éxito")
         elif return_code == 1:  # Error
             QMetaObject.invokeMethod(self, "mostrar_actualizacion_error", Qt.ConnectionType.QueuedConnection)
-            print("Error")
         elif return_code == 255:  # Parada manual
             print("Parada manual")
 
@@ -244,11 +242,8 @@ class InstalarApp(QObject):
     def instalacion_terminada(self, return_code, nombre_app):
         if return_code == 0:
             QMetaObject.invokeMethod(self, "mostrar_instalacion_exito", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
-            print("Éxito")
-            print("Nombre de la aplicación:", nombre_app)
         elif return_code == 1:
             QMetaObject.invokeMethod(self, "mostrar_instalacion_error", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
-            print("Error")
         elif return_code == 255:
             print("Parada manual")
 
@@ -303,11 +298,8 @@ class DesinstalarApp(QObject):
     def desinstalacion_terminada(self, return_code, nombre_app):
         if return_code == 0:
             QMetaObject.invokeMethod(self, "mostrar_desinstalacion_exito", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
-            print("Éxito")
-            print("Nombre de la aplicación:", nombre_app)
         elif return_code == 1:
             QMetaObject.invokeMethod(self, "mostrar_desinstalacion_error", Qt.ConnectionType.QueuedConnection, Q_ARG(str, nombre_app))
-            print("Error")
         elif return_code == 255:
             print("Parada manual")
         
