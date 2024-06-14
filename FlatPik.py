@@ -335,14 +335,6 @@ class DesinstalarApp(QObject):
         mensaje_informacion.exec()
 
 
-
-
-
-
-
-
-
-
 class PaginaWeb(QObject):
     @pyqtSlot(str)
     def abrir_pagina_web(self, url):
