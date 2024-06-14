@@ -56,6 +56,7 @@ class BuscarApp(QObject):
 <button onclick="funcionArriba()" id="botonArriba">&#8593;</button>
 <header id="h1_flatpik"><h1>FlatPik</h1></header>
 <section id="buscar"><input type="text" id="busqueda"><button id="enviar_busqueda" onclick="enviar_busqueda()">&#8618;</button></section>
+<span id="interruptor" onclick="cambiarTema()">☼</span>
 """ + contenedor_resultados + javascript + '</body>'
 
 
