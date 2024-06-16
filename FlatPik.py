@@ -279,7 +279,8 @@ class DesinstalarAppWorker(QThread):
         layout.addWidget(status_bar, 1, 0, 1, -1)
         mensaje="Uninstalling " + self.nombre_app + ". Please, wait."
         status_bar.showMessage(mensaje)
-        proceso = subprocess.Popen(["flatpak", "uninstall", "--system", "flathub", self.id_app, "-y"])
+        cmd_desinstalar= "flatpak uninstall " + self.id_app + " --system -y && flatpak uninstall --unused -y" 
+        proceso = subprocess.Popen("flatpak uninstall " + self.id_app + " --system -y && flatpak uninstall --unused -y", shell=True)
         proceso.wait()
         self.desinstalarAppTerminado.emit(proceso.returncode, self.nombre_app)
 
@@ -311,7 +312,7 @@ class DesinstalarApp(QObject):
         mensaje_informacion.setIcon(QMessageBox.Icon.Information)
         mensaje_informacion.setWindowTitle("Uninstall app")
         mensaje_informacion.setText('<b>Success</b>')
-        mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">{nombre_app} app is now uninstalled. Run \"flatpak uninstall --unused --delete-data -y\" to delete app configuration.")
+        mensaje_informacion.setInformativeText(f"<p style=\"margin-right:25px\">{nombre_app} app is now uninstalled. Run \"flatpak uninstall --delete-data -y\" to delete app configuration.")
         layout.addWidget(status_bar, 1, 0, 0, -1)
         mensaje_informacion.exec()
 
