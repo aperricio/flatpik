@@ -13,8 +13,7 @@ icon = QtGui.QIcon()
 icon.addPixmap(QPixmap("img/FlatPik.png"))
 app.setWindowIcon(icon)
 
-conf = os.path.expanduser("~/.config/FlatPik/claro.txt")
-conf_dir = os.path.expanduser("~/.config/FlatPik")
+conf = os.path.expanduser("~/.config/FlatPik-light-conf.txt")
 
 def comprobar_tema():
     global tema
@@ -344,11 +343,9 @@ class CambiarTema(QObject):
     def cambiar_tema(self):
         global tema
         if not os.path.exists(conf):
-            if not os.path.exists(conf_dir):
-                os.system("mkdir " + conf_dir)
             os.system("touch " + conf)
         else:
-            os.system("rm -rf " + conf_dir)
+            os.system("rm " + conf)
             
 
 visor = QWidget()
