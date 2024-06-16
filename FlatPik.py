@@ -279,7 +279,6 @@ class DesinstalarAppWorker(QThread):
         layout.addWidget(status_bar, 1, 0, 1, -1)
         mensaje="Uninstalling " + self.nombre_app + ". Please, wait."
         status_bar.showMessage(mensaje)
-        cmd_desinstalar= "flatpak uninstall " + self.id_app + " --system -y && flatpak uninstall --unused -y" 
         proceso = subprocess.Popen("flatpak uninstall " + self.id_app + " --system -y && flatpak uninstall --unused -y", shell=True)
         proceso.wait()
         self.desinstalarAppTerminado.emit(proceso.returncode, self.nombre_app)
